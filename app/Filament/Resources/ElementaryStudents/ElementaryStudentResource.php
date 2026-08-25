@@ -30,13 +30,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 
 
+
 class ElementaryStudentResource extends Resource
 {
     protected static ?string $model = ElementaryStudent::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Sekolah SD';
+    protected static string | UnitEnum | null $navigationGroup = 'Main Data SD';
 
     protected static ?string $recordTitleAttribute = 'ElementaryStudent';
 

@@ -22,7 +22,7 @@ class BillResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Sekolah SD';
+    protected static string | UnitEnum | null $navigationGroup = 'Main Data SD';
 
     protected static ?string $recordTitleAttribute = 'Bill';
 
