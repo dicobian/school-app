@@ -23,8 +23,11 @@ class BillResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static string | UnitEnum | null $navigationGroup = 'Main Data SD';
+    protected static ?string $navigationLabel = 'Keuangan';
+    protected static ?string $modelLabel = 'Keuangan';
+    protected static ?string $pluralModelLabel = 'Keuangan';
 
-    protected static ?string $recordTitleAttribute = 'Bill';
+    // protected static ?string $recordTitleAttribute = 'Keuangan';
 
     public static function form(Schema $schema): Schema
     {

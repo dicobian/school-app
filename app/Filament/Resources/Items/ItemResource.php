@@ -25,7 +25,7 @@ class ItemResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Barang';
 
-    protected static ?string $recordTitleAttribute = 'Item';
+    // protected static ?string $recordTitleAttribute = 'Item';
 
     public static function form(Schema $schema): Schema
     {

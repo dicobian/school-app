@@ -38,8 +38,11 @@ class ElementaryStudentResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static string | UnitEnum | null $navigationGroup = 'Main Data SD';
+    protected static ?string $navigationLabel = 'Siswa';
+    protected static ?string $modelLabel = 'Siswa';
+    protected static ?string $pluralModelLabel = 'Siswa';
 
-    protected static ?string $recordTitleAttribute = 'ElementaryStudent';
+    // protected static ?string $recordTitleAttribute = 'ElementaryStudent';
 
     public static function form(Schema $schema): Schema
     {
@@ -76,23 +79,6 @@ class ElementaryStudentResource extends Resource
                         Tab::make('Informasi Lengkap')
                             ->icon(Heroicon::OutlinedDocumentText)
                             ->schema([
-
-                                Select::make('classroom_id')
-                                    ->label('Kelas')
-                                    ->relationship('classroom', 'name')
-                                    ->required(),
-
-                                TextInput::make('nama')
-                                    ->label('Nama Lengkap')
-                                    ->required(),
-
-                                TextInput::make('nisn')
-                                    ->label('NISN')
-                                    ->required(),
-
-                                TextInput::make('nik')
-                                    ->label('NIK')
-                                    ->required(),
 
                                 TextInput::make('tingkat_rombel')
                                     ->label('Tingkat/Rombel'),
