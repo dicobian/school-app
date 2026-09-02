@@ -18,7 +18,7 @@ class BillInfolist
                     ->columnSpanFull(),
                 TextEntry::make('bulan_tahun'),
                 TextEntry::make('nominal')
-                    ->numeric(),
+                    ->money('IDR'),
                 TextEntry::make('status'),
                 TextEntry::make('tanggal_bayar')
                     ->date()

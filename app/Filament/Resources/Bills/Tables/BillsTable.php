@@ -24,7 +24,7 @@ class BillsTable
                 TextColumn::make('bulan_tahun')
                     ->searchable(),
                 TextColumn::make('nominal')
-                    ->numeric()
+                    ->money('IDR')
                     ->sortable(),
                 TextColumn::make('status')
                     ->searchable(),

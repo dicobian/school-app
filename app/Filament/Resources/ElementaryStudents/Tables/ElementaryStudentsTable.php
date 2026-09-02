@@ -86,9 +86,9 @@ class ElementaryStudentsTable
             ->filters([
                 //
             ])
-            ->recordUrl(
-                fn (Model $record): string => route('filament.admin.resources.elementary-students.edit', ['record' => $record]),
-            )
+            // ->recordUrl(
+            //     fn (Model $record): string => route('filament.admin.resources.elementary-students.edit', ['record' => $record]),
+            // )
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),

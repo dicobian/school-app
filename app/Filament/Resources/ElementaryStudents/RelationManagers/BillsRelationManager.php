@@ -14,6 +14,7 @@ use Filament\Forms;
 use Filament\Support\Enums\Width;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions\Action;
+use Filament\Support\RawJs;
 
 
 class BillsRelationManager extends RelationManager
@@ -45,8 +46,9 @@ class BillsRelationManager extends RelationManager
 
                 Forms\Components\TextInput::make('nominal')
                     ->label('Nominal (Rp)')
-                    ->numeric()
-                    ->prefix('Rp')
+                   ->mask(RawJs::make('$money($input, \'.\', \',\', 0)')) // fungsi menambahkan tanda pemisah ribuan untuk memudahkan
+                    ->stripCharacters(',') // menghapus karakter pemisah yang ditambahkan sebelumnya agar terkirim 1000000 bukan 1.000.000
+                    ->prefix('Rp') //prefix tulisan pojok kiri di kolom
                     ->required(),
 
                 Forms\Components\Select::make('status')
@@ -107,7 +109,7 @@ class BillsRelationManager extends RelationManager
                     ->url(fn ($livewire) => route('bills.pdf', ['student' => $livewire->getOwnerRecord()->id]))
                     ->openUrlInNewTab() // Opsional: Buka di tab baru
                     // ->action(function (){
-                    //     $pdf = Pdf::loadView('test');
+                    //     $pdf = Pdf::loadView('pdf.print');
                     //     return response()->streamDownload(
                     //         fn () => print($pdf->output()),
                     //         "Tagihan-test.pdf"
