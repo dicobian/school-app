@@ -10,6 +10,12 @@ use Maatwebsite\Excel\Facades\Excel;
 use Filament\Actions;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
+use App\Models\ElementaryStudent;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Filament\Actions\Action;
+use League\Csv\Writer;
 
 class ListElementaryStudents extends ListRecords
 {
@@ -26,7 +32,7 @@ class ListElementaryStudents extends ListRecords
     {
         return [
             // Tombol Import Excel Custom
-            Actions\Action::make('importExcel')
+            Action::make('importExcel')
                 ->label('Import Excel')
                 ->icon('heroicon-o-document-arrow-up')
                 ->color('success')
@@ -55,7 +61,23 @@ class ListElementaryStudents extends ListRecords
                         ->send();
                 }),
 
-            Actions\CreateAction::make()->label('New Siswa'),
+            CreateAction::make()->label('New Siswa'),
+
+            Action::make('cetak_id_card')
+                ->label('Cetak ID Card')
+                ->icon('heroicon-o-identification')
+                ->action(function () {
+                    $students = ElementaryStudent::with('classroom')->get();
+                    $writer = new PngWriter();
+                    foreach($students as $student) {
+                        $qrCode = new QrCode($student->barcode);
+                        $result = $writer->write($qrCode);
+                        $student->qr_data_uri = $result->getDataUri();
+                    }
+
+                    $pdf = Pdf::loadView('pdf.id-card', ['students' => $students])->setPaper('a4', 'potrait');
+                    return response()->streamDownload(fn () => print($pdf->output()), 'id-card-siswa.pdf');
+                })
         ];
     }
 }

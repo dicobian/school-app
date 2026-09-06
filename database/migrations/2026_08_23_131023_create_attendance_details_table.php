@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('attendance_id')->constrained()->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('elementary_students')->cascadeOnDelete(); // sesuaikan nama tabel student (misal: elementary_students)
-            $table->enum('status', ['present', 'absent', 'late', 'excused'])->default('present');
+            $table->enum('status', ['hadir', 'izin', 'sakit', 'alpha'])->default('hadir');
             $table->string('description')->nullable();
             $table->timestamps();
         });
