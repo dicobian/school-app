@@ -118,10 +118,18 @@
                         });
                     },
                     function(errorMessage) {
-                        // Jangan tampilkan error scan gagal (ini normal)
-                        // console.warn('Scan error:', errorMessage);
+
                     }
-                ).catch(function(err) {
+                ).then(() => {
+                    // fungsi agar orientasi kamera nya gak reverse kebalik gerakannya
+                    const settings = html5QrCode.getRunningTrackSettings();
+                    const videoElement = readerElement.querySelector('video');
+
+                    if (videoElement && settings.facingMode !== 'environment') {
+                        videoElement.style.transform = 'scaleX(-1)';
+                    }
+                })
+                .catch(function(err) {
                     console.error('Gagal memulai kamera:', err);
                     alert('Gagal mengakses kamera: ' + err.message);
                     startBtn.style.display = 'inline-flex';

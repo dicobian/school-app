@@ -8,7 +8,7 @@ use App\Models\AttendanceDetail;
 use App\Models\ElementaryStudent;
 use BackedEnum;
 use Filament\Support\Icons\Heroicon;
-
+use UnitEnum;
 class ScanAttendance extends Page
 {
     protected string $view = 'filament.pages.scan-attendance';
@@ -17,6 +17,7 @@ class ScanAttendance extends Page
     protected static ?string $navigationLabel = 'Scan Absensi';
     protected static ?string $title = 'Scan Absensi Siswa';
     protected static ?string $slug = 'scan-absensi';
+    protected static string | UnitEnum | null $navigationGroup = 'Absensi';
 
     public ?ElementaryStudent $scannedStudent = null;
     public ?string $message = null;

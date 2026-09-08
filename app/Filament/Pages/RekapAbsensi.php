@@ -128,25 +128,25 @@ class RekapAbsensi extends Page implements Forms\Contracts\HasForms, Tables\Cont
                 ->label('Nama Siswa')
                 ->searchable(),
 
-            Tables\Columns\TextColumn::make('total_present')
+            Tables\Columns\TextColumn::make('total_hadir')
                 ->label('Hadir')
                 ->alignCenter()
-                ->getStateUsing(fn ($record) => $this->countStatus($record->id, 'present')), // record disini apa yang dikembalikan dari get table query, dan isinya data siswa
+                ->getStateUsing(fn ($record) => $this->countStatus($record->id, 'hadir')), // record disini apa yang dikembalikan dari get table query, dan isinya data siswa
 
-            Tables\Columns\TextColumn::make('total_late')
-                ->label('Terlambat')
+            Tables\Columns\TextColumn::make('total_izin')
+                ->label('Izin')
                 ->alignCenter()
-                ->getStateUsing(fn ($record) => $this->countStatus($record->id, 'late')), // getstate using gunanya mengkalkulais hasil 
+                ->getStateUsing(fn ($record) => $this->countStatus($record->id, 'izin')), // getstate using gunanya mengkalkulais hasil
 
-            Tables\Columns\TextColumn::make('total_excused')
-                ->label('Izin/Sakit')
+            Tables\Columns\TextColumn::make('total_sakit')
+                ->label('Sakit')
                 ->alignCenter()
-                ->getStateUsing(fn ($record) => $this->countStatus($record->id, 'excused')),
+                ->getStateUsing(fn ($record) => $this->countStatus($record->id, 'sakit')),
 
-            Tables\Columns\TextColumn::make('total_absent')
+            Tables\Columns\TextColumn::make('total_alpha')
                 ->label('Alpha')
                 ->alignCenter()
-                ->getStateUsing(fn ($record) => $this->countStatus($record->id, 'absent')),
+                ->getStateUsing(fn ($record) => $this->countStatus($record->id, 'alpha')),
 
             Tables\Columns\TextColumn::make('percentage')
                 ->label('Persentase Kehadiran')
@@ -162,7 +162,7 @@ class RekapAbsensi extends Page implements Forms\Contracts\HasForms, Tables\Cont
                     }
 
                     // 2. Hitung jumlah 'present' khusus untuk siswa ($record->id) ini
-                    $hadir = $this->countStatus($record->id, 'present');
+                    $hadir = $this->countStatus($record->id, 'hadir');
 
                     // 3. Pastikan dikonversi ke float agar hasil bagi tidak menjadi 0
                     $percentage = round(((float) $hadir / (float) $totalPertemuan) * 100, 1);
