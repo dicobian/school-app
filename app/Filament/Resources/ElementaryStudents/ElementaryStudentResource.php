@@ -37,7 +37,7 @@ class ElementaryStudentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Main Data SD';
+    protected static string | UnitEnum | null $navigationGroup = 'Data SD';
     protected static ?string $navigationLabel = 'Siswa';
     protected static ?string $modelLabel = 'Siswa';
     protected static ?string $pluralModelLabel = 'Siswa';

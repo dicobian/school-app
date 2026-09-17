@@ -10,7 +10,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class BillsController extends Controller
 {
     public function printPdf(ElementaryStudent $student){
-        $student->load('bills');
+        $student->load(['bills' => function($query){
+            $query->where('status', '!=', 'lunas');
+        }]);
         $bills = $student->bills;
         $totalNominal = $bills->sum('nominal');
         $yayasan = 'YAYASAN PENDIDIKAN TUBAGUS RASYAD';

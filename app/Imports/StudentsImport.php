@@ -2,116 +2,91 @@
 
 namespace App\Imports;
 
-use App\Models\ElementaryStudent;
 use App\Models\Classroom;
-use Carbon\Carbon;
-use DateTimeInterface;
+use App\Models\ElementaryStudent;
+use Illuminate\Database\Eloquent\Model;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
-use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
-class StudentsImport implements ToModel, WithHeadingRow, WithValidation
+class Studentsimport implements ToModel, WithHeadingRow, SkipsEmptyRows
 {
-    public function model(array $row): ?ElementaryStudent
+    public function model(array $row): Model|null
     {
-        // 1. Ambil dan bersihkan NISN
-        $nisn = trim((string) ($row['nisn'] ?? ''));
+        $nama = $this->clean($row['nama'] ?? null);
+        $tingkatRombel = $this->clean($row['tingkat_rombel'] ?? null);
 
-        if ($nisn === '') {
+        if (blank($nama) || blank($tingkatRombel)) {
             return null;
         }
 
-        // 2. Ambil nilai kelas dari kolom tingkat_rombel (atau fallback ke kelas/classroom)
-        $rawClassroomName = trim((string) (
-            $row['tingkat_rombel'] ?? $row['kelas'] ?? $row['classroom'] ?? ''
-        ));
-
-        // 3. Pencarian Case-Insensitive ke tabel Classrooms
-        $classroom = null;
-        if ($rawClassroomName !== '') {
-            $classroom = Classroom::whereRaw('LOWER(name) = ?', [mb_strtolower($rawClassroomName)])->first();
-
-            // Jika kelas belum ada di database, otomatis dibuatkan kelas baru
-            if (!$classroom) {
-                $classroom = Classroom::create(['name' => $rawClassroomName]);
-            }
-        }
-
-        // 4. Buat atau perbarui data siswa berdasarkan NISN
-        return ElementaryStudent::updateOrCreate(
-            ['nisn' => $nisn],
-            [
-                // Foreign key ke tabel classrooms
-                'classroom_id'      => $classroom?->id,
-
-                // Menyimpan nama teks tingkat_rombel (misal: "Kelas 1")
-                'tingkat_rombel'    => $rawClassroomName ?: $this->value($row, 'tingkat_rombel'),
-
-                // Pemetaan header dari Excel
-                'nama'              => $this->value($row, 'nama_lengkap', 'nama'),
-                'nik'               => $this->cleanNik($row['nik'] ?? null),
-                'tempat_lahir'      => $this->value($row, 'tempat_lahir'),
-                'tanggal_lahir'     => $this->dateValue($row['tanggal_lahir'] ?? null),
-                'umur'              => $this->value($row, 'umur'),
-                'status'            => mb_strtolower($this->value($row, 'status', default: 'aktif')),
-                'jenis_kelamin'     => mb_strtolower($this->value($row, 'jenis_kelamin')),
-                'alamat'            => $this->value($row, 'alamat'),
-                'nomor_telepon'     => $this->value($row, 'no_telepon', 'nomor_telepon'),
-                'kebutuhan_khusus'  => $this->value($row, 'kebutuhan_khusus'),
-                'disabilitas'       => $this->value($row, 'disabilitas'),
-                'nomor_kip_pip'     => $this->value($row, 'nomor_kip_pip'),
-                'nama_ayah'         => $this->value($row, 'nama_ayah_kandung', 'nama_ayah'),
-                'nama_ibu'          => $this->value($row, 'nama_ibu_kandung', 'nama_ibu'),
-                'nama_wali'         => $this->value($row, 'nama_wali'),
-            ]
+        // Cari atau buat kelas berdasarkan tingkat_rombel
+        $namaKelas = mb_strtolower($tingkatRombel);
+        $kelas = Classroom::firstOrCreate(
+            ['name' => $namaKelas],
+            ['deskripsi' => '-']
         );
+
+        // Cari siswa yang SUDAH ADA berdasarkan nama (case-insensitive).
+        // Kalau ketemu → nanti di-UPDATE. Kalau tidak ketemu → dibuat baru.
+        $student = ElementaryStudent::whereRaw('LOWER(nama) = ?', [mb_strtolower($nama)])
+            ->first() ?? new ElementaryStudent();
+
+        $student->fill([
+            'classroom_id'     => $kelas->id,
+            'nama'             => $nama,
+            'nisn'             => $this->cleanNumericText($row['nisn'] ?? null),
+            'nik'              => $this->cleanNumericText($row['nik'] ?? null),
+            'tempat_lahir'     => $this->clean($row['tempat_lahir'] ?? null),
+            'tanggal_lahir'    => $this->clean($row['tanggal_lahir'] ?? null),
+            'tingkat_rombel'   => $tingkatRombel,
+            'umur'             => $this->clean($row['umur'] ?? null),
+            'status'           => $this->clean($row['status'] ?? null),
+            'jenis_kelamin'    => $this->clean($row['jenis_kelamin'] ?? null),
+            'alamat'           => $this->clean($row['alamat'] ?? null),
+            'nomor_telepon'    => $this->cleanNumericText($row['nomor_telepon'] ?? null),
+            'kebutuhan_khusus' => $this->clean($row['kebutuhan_khusus'] ?? null),
+            'disabilitas'      => $this->clean($row['disabilitas'] ?? null),
+            'nomor_kip_pip'    => $this->cleanNumericText($row['nomor_kip_pip'] ?? null),
+            'nama_ayah'        => $this->clean($row['nama_ayah'] ?? null),
+            'nama_ibu'         => $this->clean($row['nama_ibu'] ?? null),
+            'nama_wali'        => $this->clean($row['nama_wali'] ?? null),
+        ]);
+
+        return $student;
     }
 
-    public function rules(): array
-    {
-        return [
-            'nisn'         => ['required'],
-            'nama_lengkap' => ['required_without:nama'],
-            'nama'         => ['required_without:nama_lengkap'],
-        ];
-    }
-
-    private function value(array $row, string $key, ?string $fallback = null, ?string $default = null): ?string
-    {
-        $value = $row[$key] ?? ($fallback ? ($row[$fallback] ?? null) : null);
-
-        return filled($value) ? trim((string) $value) : $default;
-    }
-
-    private function cleanNik(mixed $value): ?string
+    /**
+     * Bersihkan teks biasa: buang spasi di awal/akhir,
+     * dan rapikan spasi ganda di tengah jadi 1 spasi.
+     */
+    private function clean(mixed $value): ?string
     {
         if (blank($value)) {
             return null;
         }
 
-        // Menghapus tanda petik tunggal bawaan Excel seperti `'360128...`
-        return trim(str_replace("'", '', (string) $value));
+        $value = trim((string) $value);
+        $value = preg_replace('/\s+/', ' ', $value);
+
+        return $value === '' ? null : $value;
     }
 
-    private function dateValue(mixed $value): ?string
+    /**
+     * Khusus untuk kolom "angka sebagai teks" (NIK, NISN, No. Telepon, KIP/PIP):
+     * buang tanda kutip satu (') bawaan Excel, lalu bersihkan spasi seperti biasa.
+     */
+    private function cleanNumericText(mixed $value): ?string
     {
+        $value = $this->clean($value);
+
         if (blank($value)) {
             return null;
         }
 
-        try {
-            if ($value instanceof DateTimeInterface) {
-                return $value->format('Y-m-d');
-            }
+        // Buang tanda kutip satu di manapun posisinya (awal/tengah/akhir)
+        $value = str_replace("'", '', $value);
 
-            if (is_numeric($value)) {
-                return ExcelDate::excelToDateTimeObject($value)->format('Y-m-d');
-            }
-
-            return Carbon::parse($value)->format('Y-m-d');
-        } catch (\Throwable $e) {
-            return null;
-        }
+        return trim($value) === '' ? null : trim($value);
     }
 }

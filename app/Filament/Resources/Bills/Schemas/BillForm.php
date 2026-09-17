@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Bills\Schemas;
 
+use App\Models\Bill;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Utilities\Set;
@@ -39,18 +39,51 @@ class BillForm
                     ->required()
                     ->searchable(), // seaarchable ini menjadikan dropdown punya fitur pencarian
 
-                TextInput::make('nama')
+                Select::make('nama_tagihan')
+                    ->options([
+                        'infaq_bulanan_spp' => 'Infaq Bulanan / SPP',
+                        'buku' => 'Uang Buku',
+                        'daftar_ulang' => 'Daftar Ulang',
+                        'administrasi_kelas_6',
+                        'foto' => 'Foto',
+                        'rihlah' => 'Rihlah',
+                        'akhiru_sanah' => 'Akhiru Sanah',
+                        'pendaftaran_murid_baru' => 'Pendaftaran Murid Baru',
+                        'administrasi_murid_baru' => 'Administrasi Murid Baru',
+                    ])
+                    ->live()
+                    ->afterStateUpdated(function(Set $set, ?string $state){ //tanda tanya sebelum parameter artinya paramter tersebut boleh null
+                        $nominal = Bill::NOMINAL_TAGIHAN[$state] ?? null;
+                        if ($nominal!== null){
+                            $set('nominal', $nominal);
+                        }
+                    })
+                    ->label('jenis tagihan')
                     ->required(),
-                Textarea::make('deskripsi')
-                    ->default('-')
-                    ->columnSpanFull(),
-                TextInput::make('bulan_tahun'),
                 TextInput::make('nominal')
                     ->required()
                     ->numeric()
                     ->mask(RawJs::make('$money($input, \'.\', \',\', 0)')) // fungsi menambahkan tanda pemisah ribuan untuk memudahkan
                     ->stripCharacters(',') // menghapus karakter pemisah yang ditambahkan sebelumnya agar terkirim 1000000 bukan 1.000.000
                     ->prefix('Rp'), //prefix tulisan pojok kiri di kolom
+                TextInput::make('tahun_ajaran')
+                    ->required(),
+                Select::make('bulan')
+                    ->options([
+                        'januari' => 'Januari',
+                        'februari' => 'Februari',
+                        'maret' => 'Maret',
+                        'april' => 'April',
+                        'mei' => 'Mei',
+                        'juni' => 'Juni',
+                        'juli' => 'Juli',
+                        'agustus' => 'Agustus',
+                        'september' => 'September',
+                        'oktober' => 'Oktober',
+                        'november' => 'November',
+                        'desember' => 'Desember'
+                    ])->required(),
+
                 Select::make('status')
                     ->options([
                         'belum_lunas' => 'Belum Lunas',

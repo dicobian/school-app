@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,8 +17,11 @@ class ElementaryStudentsTable
     {
         return $table
             ->columns([
+                TextColumn::make('row_number')
+                    ->label('#')
+                    ->rowIndex(),
                 TextColumn::make('classroom.name')
-                    ->searchable()
+                    ->sortable()
                     ,
                 TextColumn::make('nama')
                     ->searchable()
@@ -84,7 +88,11 @@ class ElementaryStudentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('classroom')
+                ->label('kelas')
+                ->relationship('classroom', 'name')
+                ->searchable()
+                ->preload()
             ])
             // ->recordUrl(
             //     fn (Model $record): string => route('filament.admin.resources.elementary-students.edit', ['record' => $record]),

@@ -13,10 +13,9 @@ class BillInfolist
             ->components([
                 TextEntry::make('student_id')
                     ->numeric(),
-                TextEntry::make('nama'),
-                TextEntry::make('deskripsi')
-                    ->columnSpanFull(),
-                TextEntry::make('bulan_tahun'),
+                TextEntry::make('nama_tagihan'),
+                TextEntry::make('tahun_ajaran'),
+                TextEntry::make('bulan'),
                 TextEntry::make('nominal')
                     ->money('IDR'),
                 TextEntry::make('status'),
@@ -30,5 +29,7 @@ class BillInfolist
                     ->dateTime()
                     ->placeholder('-'),
             ]);
+
+        
     }
 }

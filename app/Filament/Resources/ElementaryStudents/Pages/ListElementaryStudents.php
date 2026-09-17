@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\ElementaryStudents\Pages;
 
+use App\Exports\ElementaryStudentExport;
 use App\Filament\Resources\ElementaryStudents\ElementaryStudentResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use App\Imports\StudentsImport2;
+use App\Imports\Studentsimport;
 use Maatwebsite\Excel\Facades\Excel;
-use Filament\Actions;
 use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
 use App\Models\ElementaryStudent;
@@ -15,7 +16,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Filament\Actions\Action;
-use League\Csv\Writer;
+
 
 class ListElementaryStudents extends ListRecords
 {
@@ -52,7 +53,7 @@ class ListElementaryStudents extends ListRecords
                     $filePath = storage_path('app/public/' . $data['attachment']);
 
                     // Jalankan Import
-                    Excel::import(new StudentsImport2, $filePath);
+                    Excel::import(new StudentsImport, $filePath);
 
                     Notification::make()
                         ->title('Import Berhasil')
@@ -60,7 +61,12 @@ class ListElementaryStudents extends ListRecords
                         ->success()
                         ->send();
                 }),
-
+            Action::make('exportExcel')
+            ->label('Export Data Siswa')
+            ->icon('heroicon-o-document-arrow-down')
+            ->color('info')
+            ->action(fn () => Excel::Download( new ElementaryStudentExport, 'data-seluruh-siswa' . now()->format('Y-m-d') . '.xlsx')),
+            
             CreateAction::make()->label('New Siswa'),
 
             Action::make('cetak_id_card')

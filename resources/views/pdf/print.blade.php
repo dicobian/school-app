@@ -156,6 +156,8 @@
             <tr>
                 <th width="8%">No</th>
                 <th>Rincian Tagihan</th>
+                <th>Tahun Ajaran</th>
+                <th>Bulan</th>
                 <th width="28%">Nominal (Rp)</th>
             </tr>
         </thead>
@@ -163,7 +165,9 @@
             @forelse ($bills as $index => $bill)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td>{{ ucwords($bill->nama) }}</td>
+                    <td>{{ ucwords($bill->nama_tagihan) }}</td>
+                    <td>{{ ucwords($bill->tahun_ajaran) }}</td>
+                    <td>{{ ucwords($bill->bulan) }}</td>
                     <td class="text-right">{{ number_format($bill->nominal, 0, ',', '.') }}</td>
                 </tr>
             @empty
@@ -173,7 +177,8 @@
             @endforelse
 
             <tr class="total-row">
-                <td colspan="2" class="text-right">Total Tagihan</td>
+
+                <td colspan="4" class="text-right">Total Tagihan</td>
                 <td class="text-right">Rp {{ number_format($totalNominal, 0, ',', '.') }}</td>
             </tr>
         </tbody>

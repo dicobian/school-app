@@ -19,10 +19,11 @@ class BillsTable
                 TextColumn::make('student_id')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('nama')
+                TextColumn::make('nama_tagihan')
                     ->searchable(),
-                TextColumn::make('bulan_tahun')
+                TextColumn::make('tahun_ajaran')
                     ->searchable(),
+                TextColumn::make('bulan'),
                 TextColumn::make('nominal')
                     ->money('IDR')
                     ->sortable(),
@@ -52,5 +53,7 @@ class BillsTable
                     DeleteBulkAction::make(),
                 ]),
             ]);
+
+            
     }
 }
