@@ -7,6 +7,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 
@@ -16,14 +17,14 @@ class BillsTable
     {
         return $table
             ->columns([
-                TextColumn::make('student_id')
+                TextColumn::make('students.nama')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('nama_tagihan')
                     ->searchable(),
+                TextColumn::make('bulan'),
                 TextColumn::make('tahun_ajaran')
                     ->searchable(),
-                TextColumn::make('bulan'),
                 TextColumn::make('nominal')
                     ->money('IDR')
                     ->sortable(),
@@ -42,7 +43,13 @@ class BillsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                ->label('Lunas / Belum Lunas')
+                ->options([
+                    'lunas' => 'lunas',
+                    'belum_lunas' => 'belum lunas'
+                ])
+                ->preload()
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -54,6 +61,6 @@ class BillsTable
                 ]),
             ]);
 
-            
+
     }
 }

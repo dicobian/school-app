@@ -34,4 +34,19 @@ class Bill extends Model
         'pendaftaran_murid_baru'     => '350000',
         'administrasi_murid_baru'    => '150000',
     ];
+
+    public const BULAN = [
+        'januari' => 'Januari',
+        'februari' => 'Februari',
+        'maret' => 'Maret',
+        'april' => 'April',
+        'mei' => 'Mei',
+        'juni' => 'Juni',
+        'juli' => 'Juli',
+        'agustus' => 'Agustus',
+        'september' => 'September',
+        'oktober' => 'Oktober',
+        'november' => 'November',
+        'desember' => 'Desember',
+    ];
 }

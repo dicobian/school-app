@@ -10,9 +10,18 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 
 
-class BillsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSize, WithStyles {
+class BillsExport implements
+    FromQuery,
+    WithHeadings,
+    WithMapping,
+    ShouldAutoSize,
+    WithStyles
+    {
 
     public function query(): Builder
     {
@@ -59,6 +68,8 @@ class BillsExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoSiz
             1 => ['font' => ['bold' => true]]
         ];
     }
+
+
 }
 
 /**
