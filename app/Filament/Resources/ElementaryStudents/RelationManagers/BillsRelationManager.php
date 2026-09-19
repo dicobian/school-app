@@ -122,6 +122,7 @@ class BillsRelationManager extends RelationManager
                 TextColumn::make('created_at')
                     ->label('Tanggal input'),
                 TextColumn::make('nama_tagihan')
+                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : $state)
                     ->label('Jenis Tagihan'),
                 TextColumn::make('tahun_ajaran')
                     ->label('Tahun Ajaran')
@@ -136,6 +137,7 @@ class BillsRelationManager extends RelationManager
 
                 TextColumn::make('status')
                     ->label('Status')
+                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : $state)
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'lunas' => 'success',

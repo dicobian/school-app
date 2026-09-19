@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\DashboardStats;
+use App\Filament\Widgets\LatestUnpaidBills;
+use App\Filament\Widgets\PembayaranChart;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -24,6 +27,7 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->favicon(asset('assets/azzahra-logo.png'))
             ->default()
             ->id('admin')
             ->path('')
@@ -41,6 +45,9 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
+                DashboardStats::class,
+                LatestUnpaidBills::class,
+                PembayaranChart::class
             ])
             ->middleware([
                 EncryptCookies::class,

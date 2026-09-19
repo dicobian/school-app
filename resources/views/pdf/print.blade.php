@@ -18,31 +18,53 @@
             padding: 0;
         }
 
+        /* ===== KOP SURAT ===== */
         .kop-surat {
-            text-align: center;
+            width: 100%;
+            border-collapse: collapse;
             border-bottom: 2px solid #000;
-            padding-bottom: 8px;
             margin-bottom: 15px;
         }
 
-        .kop-surat h2 {
+        .kop-surat td {
+            vertical-align: middle;
+            padding-bottom: 8px;
+        }
+
+        .kop-logo {
+            width: 90px;
+            text-align: center;
+        }
+
+        .kop-logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        .kop-teks {
+            text-align: center;
+            padding-right: 90px; /* kompensasi lebar kolom logo supaya teks center */
+        }
+
+        .kop-teks h2 {
             margin: 0;
             font-size: 14pt;
             text-transform: uppercase;
         }
 
-        .kop-surat h3 {
+        .kop-teks h3 {
             margin: 2px 0 0 0;
             font-size: 12pt;
             font-weight: normal;
         }
 
-        .kop-surat p {
+        .kop-teks p {
             margin: 2px 0 0 0;
             font-size: 9pt;
             font-style: italic;
         }
 
+        /* ===== HEADER SURAT ===== */
         .header-surat {
             width: 100%;
             margin-bottom: 15px;
@@ -58,6 +80,7 @@
             margin-bottom: 15px;
         }
 
+        /* ===== TABEL TAGIHAN ===== */
         .table-tagihan {
             width: 100%;
             border-collapse: collapse;
@@ -79,6 +102,7 @@
         .text-center { text-align: center; }
         .total-row { font-weight: bold; }
 
+        /* ===== INFO PEMBAYARAN ===== */
         .info-pembayaran {
             margin-top: 10px;
             background-color: #f9f9f9;
@@ -87,6 +111,7 @@
             font-size: 10pt;
         }
 
+        /* ===== TANDA TANGAN ===== */
         .ttd-table {
             width: 100%;
             margin-top: 30px;
@@ -101,16 +126,23 @@
 </head>
 <body>
 
-    <!-- Kop Surat -->
-    <div class="kop-surat">
-        <h2>{{ $yayasan }}</h2>
-        <h3>{{ $sd }}</h3>
-        <p>{{ $alamat }}</p>
-        <p>Telepon: {{ $nomor }} | Email: {{ $email }}</p>
-    </div>
+    <!-- ===== KOP SURAT ===== -->
+    <table class="kop-surat">
+        <tr>
+            <td class="kop-logo">
+                <img src="{{ public_path('assets/azzahra-logo.png') }}" alt="Logo">
+            </td>
+            <td class="kop-teks">
+                <h2>{{ $yayasan }}</h2>
+                <h3>{{ $sd }}</h3>
+                <p>{{ $alamat }}</p>
+                <p>Telepon: {{ $nomor }} | Email: {{ $email }}</p>
+            </td>
+        </tr>
+    </table>
 
-    <!-- Nomor & Hal -->
-    <table class="header-surat">
+    <!-- ===== NOMOR & HAL ===== -->
+    {{-- <table class="header-surat">
         <tr>
             <td width="15%">Nomor</td>
             <td width="2%">:</td>
@@ -129,9 +161,9 @@
             <td><strong>Pemberitahuan Tagihan Pembayaran</strong></td>
             <td></td>
         </tr>
-    </table>
+    </table> --}}
 
-    <!-- Tujuan Surat (Dinamis Data Siswa) -->
+    <!-- ===== TUJUAN SURAT ===== -->
     <div class="tujuan-surat">
         Kepada Yth.<br>
         Bapak/Ibu Orang Tua / Wali dari:<br>
@@ -139,7 +171,7 @@
         <strong>Kelas:</strong> {{ ucwords($student->tingkat_rombel) }}
     </div>
 
-    <!-- Isi Surat -->
+    <!-- ===== ISI SURAT ===== -->
     <p style="margin: 5px 0;">Assalamu’alaikum Warahmatullahi Wabarakatuh,</p>
 
     <p style="margin: 5px 0; text-align: justify;">
@@ -150,7 +182,7 @@
         Sehubungan dengan pelaksanaan kegiatan belajar mengajar serta kelancaran operasional sekolah, bersama surat ini kami sampaikan rincian kewajiban administrasi/tagihan biaya pendidikan yang belum terselesaikan dengan rincian sebagai berikut:
     </p>
 
-    <!-- Tabel Rincian Tagihan Dinamis -->
+    <!-- ===== TABEL RINCIAN TAGIHAN ===== -->
     <table class="table-tagihan">
         <thead>
             <tr>
@@ -165,31 +197,30 @@
             @forelse ($bills as $index => $bill)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td>{{ ucwords($bill->nama_tagihan) }}</td>
+                    <td>{{ ucwords(str_replace('_', ' ', $bill->nama_tagihan)) }}</td>
                     <td>{{ ucwords($bill->tahun_ajaran) }}</td>
                     <td>{{ ucwords($bill->bulan) }}</td>
                     <td class="text-right">{{ number_format($bill->nominal, 0, ',', '.') }}</td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="3" class="text-center">Tidak ada tagihan yang harus dibayar.</td>
+                    <td colspan="5" class="text-center">Tidak ada tagihan yang harus dibayar.</td>
                 </tr>
             @endforelse
 
             <tr class="total-row">
-
                 <td colspan="4" class="text-right">Total Tagihan</td>
                 <td class="text-right">Rp {{ number_format($totalNominal, 0, ',', '.') }}</td>
             </tr>
         </tbody>
     </table>
 
-    <!-- Instruksi Pembayaran -->
+    <!-- ===== INSTRUKSI PEMBAYARAN ===== -->
     <div class="info-pembayaran">
         <strong>Ketentuan Pembayaran:</strong>
         <ol style="margin: 3px 0; padding-left: 18px;">
             {{-- <li>Pembayaran dapat dilakukan paling lambat pada tanggal <strong>15 {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</strong>.</li> --}}
-            <li>Pembayaran bisa dilakukan  via Transfer Bank <strong>{{ $rekening }}</strong> a.n. <strong>{{ $namarekening }}</strong>.</li>
+            <li>Pembayaran bisa dilakukan via Transfer Bank <strong>{{ $rekening }}</strong> a.n. <strong>{{ $namarekening }}</strong>.</li>
             <li>Konfirmasi bukti transfer ke Keuangan via WA: <strong>{{ $whatsapp }}</strong>.</li>
         </ol>
     </div>
@@ -198,17 +229,18 @@
 
     <p style="margin: 5px 0;">Wassalamu’alaikum Warahmatullahi Wabarakatuh.</p>
 
-    <!-- Tanda Tangan -->
-    {{-- <table class="ttd-table">
+    <!-- ===== TANDA TANGAN ===== -->
+    <table class="ttd-table">
         <tr>
             <td width="60%"></td>
             <td width="40%">
-                <p style="margin: 0;">Bendahara Sekolah,</p>
-                <br><br><br>
-                <p style="margin: 0;"><strong>( Hj. Siti Maryam, S.Pd )</strong><br>NIP. 198504122010012003</p>
+                <p style="margin: 0;">Caringin, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+                <p style="margin: 0;">Kepala Mi Azzahra Caringin</p>
+                <img style="width: 200px" src="{{ public_path('assets/cap-tandatangan.png') }}" alt="Logo">
+                <p style="margin: 0;"><strong>( Ratu Romdhonah S.Ag., M.Pd. )</strong></p>
             </td>
         </tr>
-    </table> --}}
+    </table>
 
 </body>
 </html>

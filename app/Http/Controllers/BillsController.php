@@ -17,6 +17,8 @@ class BillsController extends Controller
     {
         $pdf = $this->generateBillPdf($student);
         $namaFile = 'Tagihan_' . str_replace(' ', '_', $student->nama) . $student->tingkat_rombel . '.pdf';
+        // return $pdf;
+        return $pdf->stream($namaFile);
         return $pdf->download($namaFile);
     }
 
@@ -58,8 +60,8 @@ class BillsController extends Controller
         }]);
         $bills = $student->bills;
         $totalNominal = $bills->sum('nominal');
-        $yayasan = 'YAYASAN PENDIDIKAN TUBAGUS RASYAD';
-        $sd = 'MI AZZAHRA CARINGIN';
+        $yayasan = 'YAYASAN KIAYI HAJI AHMAD RASYAD AL ASNAWI';
+        $sd = 'MADRASAH IBTIDAIYAH AZZAHRA CARINGIN';
         $alamat = 'Caringin Mesjid RT 11 RW 03 No, Caringin, Kec. Labuan, Kabupaten Pandeglang, Banten 42264';
         $nomor = '087772702008';
         $email = 'miazzahra@gmail.com';
@@ -67,6 +69,7 @@ class BillsController extends Controller
         $namarekening = 'MI AZZAHRA';
         $whatsapp = '087772702008';
 
+        // return view('pdf.print', compact('student', 'bills', 'totalNominal', 'yayasan', 'sd', 'alamat', 'nomor', 'email', 'rekening', 'namarekening', 'whatsapp'));
         return Pdf::loadView('pdf.print', compact('student', 'bills', 'totalNominal', 'yayasan', 'sd', 'alamat', 'nomor', 'email', 'rekening', 'namarekening', 'whatsapp'))
                     ->setPaper('a4', 'portrait');
 

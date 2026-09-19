@@ -21,6 +21,7 @@ class BillsTable
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('nama_tagihan')
+                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : $state)
                     ->searchable(),
                 TextColumn::make('bulan'),
                 TextColumn::make('tahun_ajaran')
@@ -29,7 +30,14 @@ class BillsTable
                     ->money('IDR')
                     ->sortable(),
                 TextColumn::make('status')
-                    ->searchable(),
+                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : $state)
+                    ->searchable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'lunas' => 'success',
+                        'belum_lunas' => 'danger',
+                        default => 'gray',
+                    }),
                 TextColumn::make('tanggal_bayar')
                     ->date()
                     ->sortable(),

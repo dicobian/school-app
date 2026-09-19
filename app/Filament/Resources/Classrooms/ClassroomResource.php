@@ -22,7 +22,7 @@ class ClassroomResource extends Resource
 {
     protected static ?string $model = Classroom::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-library';
 
     protected static string | UnitEnum | null $navigationGroup = 'Data SD';
     protected static ?string $navigationLabel = 'Kelas';

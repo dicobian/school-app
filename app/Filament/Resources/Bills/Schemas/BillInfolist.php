@@ -30,6 +30,6 @@ class BillInfolist
                     ->placeholder('-'),
             ]);
 
-        
+
     }
 }
