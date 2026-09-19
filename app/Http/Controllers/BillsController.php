@@ -18,7 +18,7 @@ class BillsController extends Controller
         $pdf = $this->generateBillPdf($student);
         $namaFile = 'Tagihan_' . str_replace(' ', '_', $student->nama) . $student->tingkat_rombel . '.pdf';
         // return $pdf;
-        return $pdf->stream($namaFile);
+        // return $pdf->stream($namaFile);
         return $pdf->download($namaFile);
     }
 
