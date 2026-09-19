@@ -2,13 +2,22 @@
 
 namespace App\Filament\Resources\ElementaryStudents\Tables;
 
+use App\Http\Controllers\BillsController;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Actions\BulkAction;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
+use ZipArchive;
+use Illuminate\Support\Facades\Storage;
+
 
 class ElementaryStudentsTable
 {
@@ -16,8 +25,11 @@ class ElementaryStudentsTable
     {
         return $table
             ->columns([
+                TextColumn::make('row_number')
+                    ->label('#')
+                    ->rowIndex(),
                 TextColumn::make('classroom.name')
-                    ->searchable()
+                    ->sortable()
                     ,
                 TextColumn::make('nama')
                     ->searchable()
@@ -84,11 +96,19 @@ class ElementaryStudentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('classroom')
+                    ->label('kelas')
+                    ->relationship('classroom', 'name')
+                    ->searchable()
+                    ->preload(),
+                Filter::make('punya_tunggakan')
+                    ->label('Siswa Yang Punya Tunggakan')
+                    ->query(fn ($query) => $query->whereHas('bills', fn ($q) => $q->where('status', 'belum_lunas'))),
+
             ])
-            ->recordUrl(
-                fn (Model $record): string => route('filament.admin.resources.elementary-students.edit', ['record' => $record]),
-            )
+            // ->recordUrl(
+            //     fn (Model $record): string => route('filament.admin.resources.elementary-students.edit', ['record' => $record]),
+            // )
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
@@ -96,6 +116,15 @@ class ElementaryStudentsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    BulkAction::make('cetakTagihanMassal')
+                    ->label('Cetak Tagihan Zip')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->action(function ($records) {
+                        return app(BillsController::class)->printBulkPdf($records);
+                    })
+                    ->deselectRecordsAfterCompletion(),
                 ]),
             ]);
     }

@@ -22,11 +22,14 @@ class ClassroomResource extends Resource
 {
     protected static ?string $model = Classroom::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-library';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Sekolah SD';
+    protected static string | UnitEnum | null $navigationGroup = 'Data SD';
+    protected static ?string $navigationLabel = 'Kelas';
+    protected static ?string $modelLabel = 'Kelas';
+    protected static ?string $pluralModelLabel = 'Kelas';
 
-    protected static ?string $recordTitleAttribute = 'Classroom';
+    // protected static ?string $recordTitleAttribute = 'Classroom';
 
     public static function form(Schema $schema): Schema
     {

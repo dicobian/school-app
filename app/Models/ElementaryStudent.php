@@ -41,4 +41,13 @@ class ElementaryStudent extends Model
     {
         return $this->hasMany(Bill::class, 'student_id');
     }
+
+    protected static function booted(): void
+    {
+        static::creating(function (ElementaryStudent $student) {
+            if (empty($student->barcode)) {
+                $student->barcode = 'SISWA-' . strtoupper(uniqid());
+            }
+        });
+    }
 }
