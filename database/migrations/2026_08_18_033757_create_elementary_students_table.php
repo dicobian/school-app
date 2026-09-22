@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('elementary_students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('classroom_id')->constrained('classrooms')->cascadeOnDelete();
+            $table->foreignId('academic_year_id')->constrained('academic_years')->cascadeOnDelete();
             $table->string('nama')->nullable();
             $table->string('nisn')->nullable();
             $table->string('nik')->nullable();

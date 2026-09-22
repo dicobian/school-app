@@ -24,4 +24,11 @@ class Classroom extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function nextClassroom(): ?self
+    {
+        if(!$this->tingkat) return null;
+
+        return static::where('tingkat', $this->tingkat + 1)->first();
+    }
 }

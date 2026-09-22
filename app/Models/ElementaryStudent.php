@@ -12,6 +12,7 @@ class ElementaryStudent extends Model
     use HasFactory;
 
     protected $fillable = [
+        'academic_year_id',
         'classroom_id',
         'nama',
         'nisn',
@@ -35,6 +36,11 @@ class ElementaryStudent extends Model
     public function classroom(): BelongsTo
     {
         return $this->belongsTo(Classroom::class);
+    }
+
+    public function academicYear(): BelongsTo
+    {
+        return $this->belongsTo(AcademicYear::class);
     }
 
     public function bills(): HasMany
