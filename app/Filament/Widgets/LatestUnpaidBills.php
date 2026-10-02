@@ -9,14 +9,13 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LatestUnpaidBills extends BaseWidget
 {
-    protected static ?string $heading = 'Tagihan Belum Lunas Terbaru';
+    protected static ?string $heading = 'Tagihan Terbaru';
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
                 Bill::query()
-                    ->where('status', 'belum_lunas')
                     ->latest()
                     ->limit(5)
             )

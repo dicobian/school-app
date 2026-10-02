@@ -14,14 +14,10 @@ class BillInfolist
                 TextEntry::make('student_id')
                     ->numeric(),
                 TextEntry::make('nama_tagihan'),
+                TextEntry::make('keterangan'),
                 TextEntry::make('tahun_ajaran'),
-                TextEntry::make('bulan'),
                 TextEntry::make('nominal')
                     ->money('IDR'),
-                TextEntry::make('status'),
-                TextEntry::make('tanggal_bayar')
-                    ->date()
-                    ->placeholder('-'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),

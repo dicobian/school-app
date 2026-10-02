@@ -11,6 +11,7 @@ use App\Filament\Resources\AcademicYears\Schemas\AcademicYearInfolist;
 use App\Filament\Resources\AcademicYears\Tables\AcademicYearsTable;
 use App\Models\AcademicYear;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -23,6 +24,7 @@ class AcademicYearResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'TahunAjaran';
+    protected static string | UnitEnum | null $navigationGroup = 'Data SD';
     protected static ?string $navigationLabel = 'Tahun Ajaran';
     protected static ?string $modelLabel = 'Tahun Ajaran';
     protected static ?string $pluralModelLabel = 'Tahun Ajaran';

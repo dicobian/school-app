@@ -68,29 +68,6 @@ class BillForm
                     ->prefix('Rp'), //prefix tulisan pojok kiri di kolom
                 TextInput::make('tahun_ajaran')
                     ->required(),
-                Select::make('bulan')
-                    ->options([
-                        'januari' => 'Januari',
-                        'februari' => 'Februari',
-                        'maret' => 'Maret',
-                        'april' => 'April',
-                        'mei' => 'Mei',
-                        'juni' => 'Juni',
-                        'juli' => 'Juli',
-                        'agustus' => 'Agustus',
-                        'september' => 'September',
-                        'oktober' => 'Oktober',
-                        'november' => 'November',
-                        'desember' => 'Desember'
-                    ])->required(),
-
-                Select::make('status')
-                    ->options([
-                        'belum_lunas' => 'Belum Lunas',
-                        'lunas' => 'Lunas'
-                    ])
-                    ->default('belum_lunas'),
-                DatePicker::make('tanggal_bayar'),
             ]);
     }
 }

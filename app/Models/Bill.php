@@ -11,6 +11,7 @@ class Bill extends Model
         'student_id',
         'nama_tagihan',
         'tahun_ajaran',
+        'keterangan',
         'bulan',
         'nominal',
         'status',

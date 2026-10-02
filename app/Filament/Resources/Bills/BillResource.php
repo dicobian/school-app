@@ -23,10 +23,10 @@ class BillResource extends Resource
     protected static string|BackedEnum|null $navigationIcon =  'heroicon-o-banknotes';
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Data SD';
-    protected static ?string $navigationLabel = 'Keuangan';
-    protected static ?string $modelLabel = 'Keuangan';
-    protected static ?string $pluralModelLabel = 'Keuangan';
+    protected static string | UnitEnum | null $navigationGroup = 'keuangan';
+    protected static ?string $navigationLabel = 'Tagihan';
+    protected static ?string $modelLabel = 'Tagihan';
+    protected static ?string $pluralModelLabel = 'Tagihan';
 
     // protected static ?string $recordTitleAttribute = 'Keuangan';
 

@@ -15,6 +15,7 @@ class ProsesKenaikanKelas extends Page
 {
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-arrow-trending-up';
     protected static ?string $navigationLabel = 'Proses Kenaikan Kelas';
+    protected static string | UnitEnum | null $navigationGroup = 'Data SD';
     protected static ?string $title = 'Proses Kenaikan Kelas';
     protected string $view = 'filament.pages.proses-kenaikan-kelas';
 
