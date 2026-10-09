@@ -24,7 +24,7 @@ class BillForm
                     ->options(Classroom::pluck('name', 'id')) // langsung dari model Classroom
                     ->live() // live ini agar setiap perubahan terjadi maka akan mentrigger fungsi yang diperlukan
                     ->dehydrated(false) // <-- PENTING: jangan disimpan ke tabel bills
-                    ->afterStateUpdated(fn (Set $set) => $set('student_id', null)), // fungsi untuk mentrigger perubahan pada selection nama siswa, jika pilih kelas tertentu maka siswa yang ditampilkan hanya siswa yang dikelas tersebut aja
+                    ->afterStateUpdated(fn (Set $set) => $set('student_id', null)), // fungsi untuk mentrigger mengkosongkan data siswa ketika terjadi perubahan, mengkosongkan untuk diisi dengan data lain agar tidak tercampur
 
                 Select::make('student_id')
                     ->label('Nama Siswa')

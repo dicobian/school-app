@@ -8,9 +8,11 @@ use App\Filament\Resources\ElementaryStudents\Pages\ListElementaryStudents;
 use App\Filament\Resources\ElementaryStudents\Pages\ViewElementaryStudent;
 use App\Filament\Resources\ElementaryStudents\RelationManagers\BillsRelationManager;
 use App\Filament\Resources\ElementaryStudents\RelationManagers\PembayaranRelationManager;
+use App\Filament\Resources\ElementaryStudents\RelationManagers\TabunganRelationManager;
 use App\Filament\Resources\ElementaryStudents\Schemas\ElementaryStudentForm;
 use App\Filament\Resources\ElementaryStudents\Schemas\ElementaryStudentInfolist;
 use App\Filament\Resources\ElementaryStudents\Tables\ElementaryStudentsTable;
+use App\Filament\Resources\Tabungans\TabunganResource;
 use App\Models\ElementaryStudent;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -65,7 +67,8 @@ class ElementaryStudentResource extends Resource
     {
         return [
             'bills' => RelationManagers\BillsRelationManager::class,
-            'pembayaran' => PembayaranRelationManager::class
+            'pembayaran' => PembayaranRelationManager::class,
+            'tabungan' => TabunganRelationManager::class
         ];
     }
 

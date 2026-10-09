@@ -56,6 +56,11 @@ class ElementaryStudent extends Model
         return $this->hasMany(TransaksiPembayaran::class, 'student_id');
     }
 
+    public function tabungan(): HasMany
+    {
+        return $this->hasMany(Tabungan::class, 'student_id');
+    }
+
     protected static function booted(): void
     {
         static::creating(function (ElementaryStudent $student) {
@@ -67,7 +72,9 @@ class ElementaryStudent extends Model
 
 
 
-    //method logika
+    //===========================================================
+    //METHOD LOGIKA BILL PEMBAYARAN
+    //===========================================================
 
     public function scopePunyaTunggakan(Builder $query):Builder
     {
@@ -155,5 +162,17 @@ class ElementaryStudent extends Model
         $tunggakan = $this->bills()->where('nama_tagihan', 'tunggakan_lain')->sum('nominal');
         $pembayaran = $this->pembayaran()->where('kategori_pembayaran', 'tunggakan_lain')->sum('nominal');
         return max(0, $tunggakan - $pembayaran) ;
+    }
+
+
+    //===========================================================
+    //METHOD LOGIKA TABUNGAN
+    //===========================================================
+
+    public function getTotalTabunganAttribute(): int|float
+    {
+        $tabungan = $this->tabungan()->where('jenis_transaksi_tabungan', 'menabung')->sum('nominal');
+        $penarikan = $this->tabungan()->where('jenis_transaksi_tabungan', 'penarikan')->sum('nominal');
+        return max(0, $tabungan - $penarikan);
     }
 }

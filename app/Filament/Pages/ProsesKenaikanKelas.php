@@ -124,7 +124,7 @@ class ProsesKenaikanKelas extends Page
             Notification::make()
                 ->title('Tidak ada siswa aktif di tahun asal')
                 ->warning()->send();
-            return;
+            // return;
         }
 
         $this->siswaList = $records->groupBy('classroom_id')->map(function ($items, $classroomId) {
