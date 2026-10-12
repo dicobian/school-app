@@ -7,9 +7,12 @@ use App\Filament\Resources\ElementaryStudents\Pages\EditElementaryStudent;
 use App\Filament\Resources\ElementaryStudents\Pages\ListElementaryStudents;
 use App\Filament\Resources\ElementaryStudents\Pages\ViewElementaryStudent;
 use App\Filament\Resources\ElementaryStudents\RelationManagers\BillsRelationManager;
+use App\Filament\Resources\ElementaryStudents\RelationManagers\PembayaranRelationManager;
+use App\Filament\Resources\ElementaryStudents\RelationManagers\TabunganRelationManager;
 use App\Filament\Resources\ElementaryStudents\Schemas\ElementaryStudentForm;
 use App\Filament\Resources\ElementaryStudents\Schemas\ElementaryStudentInfolist;
 use App\Filament\Resources\ElementaryStudents\Tables\ElementaryStudentsTable;
+use App\Filament\Resources\Tabungans\TabunganResource;
 use App\Models\ElementaryStudent;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -28,8 +31,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-
-
+use Filament\Resources\RelationManagers\RelationManager;
 
 class ElementaryStudentResource extends Resource
 {
@@ -64,7 +66,9 @@ class ElementaryStudentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            'bills' => RelationManagers\BillsRelationManager::class
+            'bills' => RelationManagers\BillsRelationManager::class,
+            'pembayaran' => PembayaranRelationManager::class,
+            'tabungan' => TabunganRelationManager::class
         ];
     }
 

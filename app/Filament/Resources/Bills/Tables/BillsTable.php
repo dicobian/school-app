@@ -23,23 +23,11 @@ class BillsTable
                 TextColumn::make('nama_tagihan')
                     ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : $state)
                     ->searchable(),
-                TextColumn::make('bulan'),
+                TextColumn::make('keterangan'),
                 TextColumn::make('tahun_ajaran')
                     ->searchable(),
                 TextColumn::make('nominal')
                     ->money('IDR')
-                    ->sortable(),
-                TextColumn::make('status')
-                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : $state)
-                    ->searchable()
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'lunas' => 'success',
-                        'belum_lunas' => 'danger',
-                        default => 'gray',
-                    }),
-                TextColumn::make('tanggal_bayar')
-                    ->date()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -51,13 +39,6 @@ class BillsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('status')
-                ->label('Lunas / Belum Lunas')
-                ->options([
-                    'lunas' => 'lunas',
-                    'belum_lunas' => 'belum lunas'
-                ])
-                ->preload()
             ])
             ->recordActions([
                 ViewAction::make(),

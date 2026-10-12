@@ -40,15 +40,16 @@ class BillsRelationManager extends RelationManager
 
                Select::make('nama_tagihan')
                     ->options([
-                        'infaq_bulanan_spp' => 'Infaq Bulanan / SPP',
-                        'buku' => 'Uang Buku',
-                        'daftar_ulang' => 'Daftar Ulang',
-                        'administrasi_kelas_6',
-                        'foto' => 'Foto',
-                        'rihlah' => 'Rihlah',
-                        'akhiru_sanah' => 'Akhiru Sanah',
-                        'pendaftaran_murid_baru' => 'Pendaftaran Murid Baru',
-                        'administrasi_murid_baru' => 'Administrasi Murid Baru',
+                        'infaq_bulanan_spp'          => 'Infaq Bulanan / Spp',//1
+                        'administrasi_murid_baru'    => 'Administrasi Murid Baru',//2
+                        'administrasi_daftar_ulang'  => 'Administrasi Daftar Ulang',//3
+                        'administrasi_kelas_6'       => 'Administrasi Kelas 6',//4
+                        'buku_paket_1'               => 'Buku Paket 1',//5
+                        'buku_paket_2'               => 'Buku Paket 2',//6
+                        'foto_ijazah'                => 'Foto Ijazah',//7
+                        'akhiru_sanah'               => 'Akhiru Sanah',//8
+                        'pendaftaran_murid_baru'     => 'Pendaftaran Murid Baru',//9
+                        'tunggakan_lain' => 'Tunggakan Lain',
                     ])
                     ->live()
                     ->afterStateUpdated(function(Set $set, ?string $state){ //tanda tanya sebelum parameter artinya paramter tersebut boleh null
@@ -59,6 +60,7 @@ class BillsRelationManager extends RelationManager
                     })
                     ->label('jenis tagihan')
                     ->required(),
+                TextInput::make('keterangan'),
                 TextInput::make('nominal')
                     ->required()
                     ->numeric()
@@ -67,57 +69,24 @@ class BillsRelationManager extends RelationManager
                     ->prefix('Rp'), //prefix tulisan pojok kiri di kolom
                 TextInput::make('tahun_ajaran')
                     ->required(),
-                Select::make('bulan')
-                    ->options([
-                        'januari' => 'Januari',
-                        'februari' => 'Februari',
-                        'maret' => 'Maret',
-                        'april' => 'April',
-                        'mei' => 'Mei',
-                        'juni' => 'Juni',
-                        'juli' => 'Juli',
-                        'agustus' => 'Agustus',
-                        'september' => 'September',
-                        'oktober' => 'Oktober',
-                        'november' => 'November',
-                        'desember' => 'Desember'
-                    ])->required(),
-
-                Select::make('status')
-                    ->options([
-                        'belum_lunas' => 'Belum Lunas',
-                        'lunas' => 'Lunas'
-                    ])
-                    ->live()
-                    ->afterStateUpdated(function (Set $set, ?string $state){
-                        if($state == 'lunas') {
-                            $set('tanggal_bayar', now()->toDateString());
-                        } else {
-                            $set('tanggal_bayar', null);
-                        }
-                    })
-                    ->default('belum_lunas'),
-                DatePicker::make('tanggal_bayar'),
             ]);
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('bulan_tahun')
+            ->recordTitleAttribute('nama_tagihan')
             ->description(function () {
-            $bills = $this->getOwnerRecord()->bills;
-            $total = $bills->sum('nominal');
-            $lunas = $bills->where('status', 'lunas')->sum('nominal');
-            $belum = $bills->where('status', 'belum_lunas')->sum('nominal');
+                $student = $this->getOwnerRecord();
+                $total = $student->sisa_tagihan; //acceessor dipanggil tanpa tanda kurung, sementara method tetap pakai tanda kurung
 
-            return new \Illuminate\Support\HtmlString(
+                return new \Illuminate\Support\HtmlString(
 
-                '<div class="text-lg font-bold text-danger-600">'
-                . 'Tunggakan: Rp ' . number_format($belum, 0, ',', '.')
-                . '</div>'
-            );
-        })
+                    '<div class="text-lg font-bold text-danger-600">'
+                    . 'Tunggakan: Rp ' . number_format($total, 0, ',', '.')
+                    . '</div>'
+                );
+            })
             ->columns([
                 TextColumn::make('created_at')
                     ->label('Tanggal input'),
@@ -128,26 +97,10 @@ class BillsRelationManager extends RelationManager
                     ->label('Tahun Ajaran')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('bulan')
-                    ->label('Bulan'),
                 TextColumn::make('nominal')
                     ->label('Nominal')
                     ->money('IDR')
                     ->sortable(),
-
-                TextColumn::make('status')
-                    ->label('Status')
-                    ->formatStateUsing(fn (?string $state) => $state ? str_replace('_', ' ', $state) : $state)
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'lunas' => 'success',
-                        'belum_lunas' => 'danger',
-                        default => 'gray',
-                    }),
-
-                TextColumn::make('tanggal_bayar')
-                    ->label('Tgl Bayar')
-                    ->date('d M Y'),
                 ])
                 ->headerActions([
                 Actions\CreateAction::make()

@@ -11,6 +11,7 @@ class Bill extends Model
         'student_id',
         'nama_tagihan',
         'tahun_ajaran',
+        'keterangan',
         'bulan',
         'nominal',
         'status',
@@ -24,15 +25,15 @@ class Bill extends Model
     }
 
     public const NOMINAL_TAGIHAN = [ //ini bukan variable konstanta class dan variable berbeda disini
-        'infaq_bulanan_spp'          => '150000',
-        'buku'                       => '250000',
-        'daftar_ulang'               => '500000',
-        'administrasi_kelas_6'       => '300000',
-        'foto'                       => '50000',
-        'rihlah'                     => '200000',
-        'akhiru_sanah'               => '200000',
-        'pendaftaran_murid_baru'     => '350000',
-        'administrasi_murid_baru'    => '150000',
+        'infaq_bulanan_spp'          => '110000',//1
+        'administrasi_murid_baru'    => '250000',//2
+        'administrasi_daftar_ulang'  => '500000',//3
+        'administrasi_kelas_6'       => '300000',//4
+        'buku_paket_1'               => '200000',//5
+        'buku_paket_2'               => '200000',//6
+        'foto_ijazah'                => '50000',//7
+        'akhiru_sanah'               => '50000',//8
+        'pendaftaran_murid_baru'     => '350000',//9
     ];
 
     public const BULAN = [

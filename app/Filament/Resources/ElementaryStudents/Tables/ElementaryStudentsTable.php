@@ -103,7 +103,7 @@ class ElementaryStudentsTable
                     ->preload(),
                 Filter::make('punya_tunggakan')
                     ->label('Siswa Yang Punya Tunggakan')
-                    ->query(fn ($query) => $query->whereHas('bills', fn ($q) => $q->where('status', 'belum_lunas'))),
+                    ->query(fn ($query) => $query->punyaTunggakan()),
 
             ])
             // ->recordUrl(

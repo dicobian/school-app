@@ -187,43 +187,66 @@
         <thead>
             <tr>
                 <th width="8%">No</th>
-                <th>Rincian Tagihan</th>
-                <th>Tahun Ajaran</th>
-                <th>Bulan</th>
+                <th colspan="3">Rincian Tagihan</th>
                 <th width="28%">Nominal (Rp)</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($bills as $index => $bill)
-                <tr>
-                    <td class="text-center">{{ $index + 1 }}</td>
-                    <td>{{ ucwords(str_replace('_', ' ', $bill->nama_tagihan)) }}</td>
-                    <td>{{ ucwords($bill->tahun_ajaran) }}</td>
-                    <td>{{ ucwords($bill->bulan) }}</td>
-                    <td class="text-right">{{ number_format($bill->nominal, 0, ',', '.') }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="5" class="text-center">Tidak ada tagihan yang harus dibayar.</td>
-                </tr>
-            @endforelse
+            <tr>
+                <td class="text-center">{{ 1 }}</td>
+                <td colspan="3">{{ 'infaq_bulanan_spp' }}</td>
+                <td class="text-right">{{ number_format( $student->sisa_tunggakan_spp, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">{{ 2 }}</td>
+                <td colspan="3">{{ 'administrasi_murid_baru' }}</td>
+                <td class="text-right">{{ number_format( $student->sisa_tunggakan_admr_murid_baru, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">{{ 3 }}</td>
+                <td colspan="3">{{ 'administrasi_daftar_ulang' }}</td>
+                <td class="text-right">{{ number_format($student->sisa_tunggakan_admr_daftar_ulang, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">{{ 4 }}</td>
+                <td colspan="3">{{ 'administrasi_kelas_6' }}</td>
+                <td class="text-right">{{ number_format( $student->sisa_tunggakan_admr_kelas_6, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">{{ 5 }}</td>
+                <td colspan="3">{{ 'buku_paket_1' }}</td>
+                <td class="text-right">{{ number_format( $student->sisa_tunggakan_buku_paket_1, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">{{ 6 }}</td>
+                <td colspan="3">{{ 'buku_paket_2' }}</td>
+                <td class="text-right">{{ number_format( $student->sisa_tunggakan_buku_paket_2, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">{{ 7 }}</td>
+                <td colspan="3">{{ 'foto_ijazah' }}</td>
+                <td class="text-right">{{ number_format( $student->sisa_tunggakan_foto_ijazah, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">{{ 8 }}</td>
+                <td colspan="3">{{ 'akhiru_sanah' }}</td>
+                <td class="text-right">{{ number_format( $student->sisa_tunggakan_akhiru_sanah, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td class="text-center">{{ 9 }}</td>
+                <td colspan="3">{{ 'tunggakan lain' }}</td>
+                <td class="text-right">{{ number_format( $student->sisa_tunggakan_lain, 0, ',', '.') }}</td>
+            </tr>
 
             <tr class="total-row">
-                <td colspan="4" class="text-right">Total Tagihan</td>
-                <td class="text-right">Rp {{ number_format($totalNominal, 0, ',', '.') }}</td>
+                <td colspan="4" class="text-right">Sisa Tagihan</td>
+                <td class="text-right">Rp {{ number_format($student->sisa_tagihan, 0, ',', '.') }}</td>
             </tr>
         </tbody>
     </table>
 
     <!-- ===== INSTRUKSI PEMBAYARAN ===== -->
-    <div class="info-pembayaran">
-        <strong>Ketentuan Pembayaran:</strong>
-        <ol style="margin: 3px 0; padding-left: 18px;">
-            {{-- <li>Pembayaran dapat dilakukan paling lambat pada tanggal <strong>15 {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</strong>.</li> --}}
-            <li>Pembayaran bisa dilakukan via Transfer Bank <strong>{{ $rekening }}</strong> a.n. <strong>{{ $namarekening }}</strong>.</li>
-            <li>Konfirmasi bukti transfer ke Keuangan via WA: <strong>{{ $whatsapp }}</strong>.</li>
-        </ol>
-    </div>
+
 
     <p style="margin: 8px 0;">Demikian surat pemberitahuan ini kami sampaikan. Atas perhatian dan kerja samanya, kami ucapkan terima kasih.</p>
 

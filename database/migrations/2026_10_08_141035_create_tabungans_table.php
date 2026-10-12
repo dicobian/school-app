@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('warehouses', function (Blueprint $table) {
+        Schema::create('tabungans', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Nama Gudang (misal: "Gudang Utama", "Gudang Barat")
-            $table->string('location')->nullable(); // Lokasi/Alamat
+            $table->foreignId('student_id')->constrained('elementary_students')->cascadeOnDelete();
+            $table->string('jenis_transaksi_tabungan');
+            $table->integer('nominal');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('warehouses');
+        Schema::dropIfExists('tabungans');
     }
 };

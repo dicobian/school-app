@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Bill;
+use App\Models\TransaksiPembayaran;
 use Filament\Widgets\ChartWidget;
 
 class PembayaranChart extends ChartWidget
@@ -18,9 +19,9 @@ class PembayaranChart extends ChartWidget
             $date = now()->subMonths($i);
             $labels[] = $date->translatedFormat('M Y');
 
-            $data[] = Bill::where('status', 'lunas')
-                ->whereMonth('tanggal_bayar', $date->month)
-                ->whereYear('tanggal_bayar', $date->year)
+            $data[] = TransaksiPembayaran::query()
+                ->whereMonth('created_at', $date->month)
+                ->whereYear('created_at', $date->year)
                 ->sum('nominal');
         }
 

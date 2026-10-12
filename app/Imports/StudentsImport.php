@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Classroom;
 use App\Models\ElementaryStudent;
+use App\Models\AcademicYear;
 use Illuminate\Database\Eloquent\Model;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -27,6 +28,8 @@ class Studentsimport implements ToModel, WithHeadingRow, SkipsEmptyRows
             ['deskripsi' => '-']
         );
 
+        $tahun_ajaran = AcademicYear::where('status', 'aktif')->first();
+
         // Cari siswa yang SUDAH ADA berdasarkan nama (case-insensitive).
         // Kalau ketemu → nanti di-UPDATE. Kalau tidak ketemu → dibuat baru.
         $student = ElementaryStudent::whereRaw('LOWER(nama) = ?', [mb_strtolower($nama)])
@@ -34,6 +37,7 @@ class Studentsimport implements ToModel, WithHeadingRow, SkipsEmptyRows
 
         $student->fill([
             'classroom_id'     => $kelas->id,
+            'academic_year_id' => $tahun_ajaran->id,
             'nama'             => $nama,
             'nisn'             => $this->cleanNumericText($row['nisn'] ?? null),
             'nik'              => $this->cleanNumericText($row['nik'] ?? null),
@@ -41,7 +45,7 @@ class Studentsimport implements ToModel, WithHeadingRow, SkipsEmptyRows
             'tanggal_lahir'    => $this->clean($row['tanggal_lahir'] ?? null),
             'tingkat_rombel'   => $tingkatRombel,
             'umur'             => $this->clean($row['umur'] ?? null),
-            'status'           => $this->clean($row['status'] ?? null),
+            'status' => strtolower($this->clean($row['status'] ?? null)),
             'jenis_kelamin'    => $this->clean($row['jenis_kelamin'] ?? null),
             'alamat'           => $this->clean($row['alamat'] ?? null),
             'nomor_telepon'    => $this->cleanNumericText($row['nomor_telepon'] ?? null),
